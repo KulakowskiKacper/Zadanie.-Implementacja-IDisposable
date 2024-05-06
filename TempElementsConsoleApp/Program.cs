@@ -31,23 +31,21 @@ namespace TempElementsConsoleApp
                                                                                             // usuwanie pliku
 
             }
-            Console.WriteLine("\nTworzenie pliku przy użyciu bloku try-catch-finally");
-            TempFile tempFile3 = new TempFile();                                            // tworzenie pliku w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
-            try                                                                             // blok try-catch
+            Console.WriteLine("\nTworzenie pliku przy użyciu bloku try-catch-finally");     
+            TempFile tempFile3 = null;
+
+            try
             {
-                Console.WriteLine(tempFile3.FilePath);                                      // ścieżka dostępu do pliku
-                Console.WriteLine(tempFile3.IsDestroyed);                                   // false
-                tempFile3.AddText("Hello World!");                                          // zapis do pliku
-                Console.WriteLine(tempFile3.IsDestroyed);                                   // false
+                tempFile3 = new TempFile();
+                tempFile3.AddText("Hello, World!");
             }
-            catch (Exception ex)                                                            // przechwytywanie wyjątku
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);                                              // wyświetlenie komunikatu o błędzie
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
-            finally                                                                         // blok finally
+            finally
             {
-                tempFile3.Dispose();                                                        // usuwanie pliku
-                Console.WriteLine(tempFile3.IsDestroyed);                                   // true
+                tempFile3?.Dispose();
             }
 
         }
