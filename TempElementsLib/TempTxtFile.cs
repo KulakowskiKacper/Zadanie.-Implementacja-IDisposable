@@ -7,53 +7,66 @@ namespace TempElementsLib
 {
     public class TempTxtFile : TempFile
     {
-        private StreamWriter? streamWriter;
-        private StreamReader? streamReader;
+        private TextReader? txtReader;
+        private TextWriter? txtWriter;
+        private FileStream fileStream;
+
+
+        ~TempTxtFile()
+        {
+            Dispose(false);
+
+        }
 
         public TempTxtFile() : base()
         {
-            InitializeStreamObjects();
+            fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.ReadWrite);
+            txtReader = new StreamReader(fileStream);
+            txtWriter = new StreamWriter(fileStream);
         }
 
         public TempTxtFile(string path) : base(path)
         {
-            InitializeStreamObjects();
+            txtReader = new StreamReader(fileStream);
+            txtWriter = new StreamWriter(fileStream);
         }
-
-        private void InitializeStreamObjects()
-        {
-            streamWriter = new StreamWriter(fileStream);
-            streamReader = new StreamReader(fileStream);
-        }
-
 
         public void Write(string text)
         {
-            streamWriter.Write(text);
-            streamWriter.Flush();
+            txtWriter?.Write(text);
         }
-
+        
         public void WriteLine(string text)
         {
-            streamWriter.WriteLine(text);
-            streamWriter.Flush();
+            txtWriter?.WriteLine(text);
+            txtWriter?.Flush();
         }
 
         public string ReadLine()
         {
-            return streamReader.ReadLine();
+            return txtReader?.ReadLine();
         }
 
         public string ReadAllText()
         {
-            return streamReader.ReadToEnd();
+            return txtReader?.ReadToEnd();
         }
 
         public override void Dispose()
         {
-            streamWriter?.Close();
-            streamReader?.Close();
+            txtReader?.Dispose();
+            txtWriter?.Dispose();
             base.Dispose();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                txtReader?.Dispose();
+                txtWriter?.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

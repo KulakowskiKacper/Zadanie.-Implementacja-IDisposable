@@ -46,7 +46,7 @@ namespace TempElementsConsoleApp
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally:");     
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally:");
             TempFile tempFile3 = null;
 
             try
@@ -75,7 +75,7 @@ namespace TempElementsConsoleApp
                 Console.WriteLine(tempFile4.FilePath);
                 tempFile4.Dispose();
                 Console.WriteLine(tempFile4.IsDestroyed);
-                
+
             }
             Console.WriteLine("------------------------------------------------------------\nPróba utworzenia pliku przy użyciu niepoprawnej ścieżki używając bloku using");
             try

@@ -17,11 +17,11 @@ namespace TempElementsLib
 
         public TempFile()
         {
-            
             string tempPath = Path.GetTempFileName();
-            fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
-            fileInfo = new FileInfo(tempPath);
-            
+            using (fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                fileInfo = new FileInfo(tempPath);
+            }
         }
 
         public TempFile(string path)
