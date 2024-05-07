@@ -13,9 +13,13 @@ namespace TempElementsConsoleApp
             Console.ResetColor();
             Console.WriteLine("Tworzenie pliku przy użyciu \"standardowych\" komend");
             TempFile tempFile = new TempFile();                                             // tworzenie pliku w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
+            Console.Write("Ścieżka dostępu do pliku: ");
             Console.WriteLine(tempFile.FilePath);                                           // ścieżka dostępu do pliku
+            Console.WriteLine("Wykonanie metody Dispose:");
+            Console.WriteLine("Przed:");
             Console.WriteLine(tempFile.IsDestroyed);                                        // false
             tempFile.Dispose();                                                             // usuwanie pliku
+            Console.WriteLine("Po:");
             Console.WriteLine(tempFile.IsDestroyed);                                        // true
             Console.WriteLine("Próba zapisu do pliku po jego zamknięciu:");
             try
@@ -26,9 +30,10 @@ namespace TempElementsConsoleApp
             {
                 Console.WriteLine(ex.Message);                                              // wyświetlenie komunikatu o błędzie
             }
-            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku using");
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku using: ");
             using (TempFile tempFile2 = new TempFile())                                     // tworzenie katalogu w domyslnej dla systemu/użytkownika lokalizacji
             {
+                Console.Write("Ścieżka dostępu do pliku: ");
                 Console.WriteLine(tempFile2.FilePath);                                      // ścieżka dostępu do pliku
                 Console.WriteLine(tempFile2.IsDestroyed);                                   // false
             }
@@ -41,7 +46,7 @@ namespace TempElementsConsoleApp
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally");     
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally:");     
             TempFile tempFile3 = null;
 
             try
@@ -61,11 +66,12 @@ namespace TempElementsConsoleApp
                 Console.WriteLine(tempFile3.IsDestroyed);
             }
 
-            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using");
-            using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using:");
+            using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test.tmp"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
             {
                 Console.WriteLine(tempFile4);
                 Console.WriteLine(tempFile4.IsDestroyed);
+                Console.Write("Ścieżka dostępu do pliku: ");
                 Console.WriteLine(tempFile4.FilePath);
                 tempFile4.Dispose();
                 Console.WriteLine(tempFile4.IsDestroyed);
@@ -86,6 +92,28 @@ namespace TempElementsConsoleApp
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nTestowanie przy użyciu konsoli wymienionych założeń z zadania 2:");
+            Console.ResetColor();
+            Console.WriteLine("Tworzenie tymczasowego pliku tekstowego przy użyciu bloku using:");
+            using (TempTxtFile tempTxtFile = new TempTxtFile())
+            {
+                Console.Write("Ścieżka do pliku: ");
+                Console.WriteLine(tempTxtFile.FilePath);
+                Console.WriteLine("Dodanie przy pomocy Write, a następnie odczytanie przy pomocy ReadLine, tekstu \"test\"");
+                tempTxtFile.Write("test");
+                tempTxtFile.fileStream.Position = 0;
+                Console.WriteLine(tempTxtFile.ReadLine());
+                Console.WriteLine("Dodanie przy pomocy WriteLine, a następnie odczytanie przy pomocy ReadAllText, tekstu \"test2 \"");
+                tempTxtFile.WriteLine("test2 ");
+                tempTxtFile.fileStream.Position = 0;
+                Console.WriteLine(tempTxtFile.ReadAllText());
+                Console.WriteLine("Dodanie tekstu \"test3\" przy pomocy Write w celu sprawdzenia czy zapisze się w nowej linijce");
+                tempTxtFile.Write("test3");
+                tempTxtFile.fileStream.Position = 0;
+                Console.WriteLine(tempTxtFile.ReadAllText());
             }
 
         }

@@ -9,7 +9,7 @@ namespace TempElementsLib
     public class TempFile : ITempFile
     {
 
-        public bool IsDestroyed { get; private set; }
+        public bool IsDestroyed { get; set; }
         public string FilePath => fileInfo.FullName;
 
         public readonly FileStream fileStream;
@@ -55,7 +55,7 @@ namespace TempElementsLib
             fileStream.Flush();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
