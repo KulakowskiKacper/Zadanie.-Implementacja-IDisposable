@@ -26,7 +26,7 @@ namespace TempElementsConsoleApp
             {
                 Console.WriteLine(ex.Message);                                              // wyświetlenie komunikatu o błędzie
             }
-            Console.WriteLine("------------------------------\nTworzenie pliku przy użyciu bloku using");
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku using");
             using (TempFile tempFile2 = new TempFile())                                     // tworzenie katalogu w domyslnej dla systemu/użytkownika lokalizacji
             {
                 Console.WriteLine(tempFile2.FilePath);                                      // ścieżka dostępu do pliku
@@ -41,7 +41,7 @@ namespace TempElementsConsoleApp
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.WriteLine("------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally");     
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally");     
             TempFile tempFile3 = null;
 
             try
@@ -49,6 +49,7 @@ namespace TempElementsConsoleApp
                 tempFile3 = new TempFile();
                 tempFile3.AddText("Hello, World!");
                 Console.WriteLine(tempFile3.FilePath);
+                Console.WriteLine(tempFile3.IsDestroyed);
             }
             catch (Exception ex)
             {
@@ -57,7 +58,34 @@ namespace TempElementsConsoleApp
             finally
             {
                 tempFile3?.Dispose();
+                Console.WriteLine(tempFile3.IsDestroyed);
+            }
 
+            Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using");
+            using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
+            {
+                Console.WriteLine(tempFile4);
+                Console.WriteLine(tempFile4.IsDestroyed);
+                Console.WriteLine(tempFile4.FilePath);
+                tempFile4.Dispose();
+                Console.WriteLine(tempFile4.IsDestroyed);
+                
+            }
+            Console.WriteLine("------------------------------------------------------------\nPróba utworzenia pliku przy użyciu niepoprawnej ścieżki używając bloku using");
+            try
+            {
+                using (TempFile tempFile5 = new TempFile($"$D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test{Path.DirectorySeparatorChar}test"))
+                {
+                    Console.WriteLine(tempFile5);
+                    Console.WriteLine(tempFile5.IsDestroyed);
+                    Console.WriteLine(tempFile5.FilePath);
+                    tempFile5.Dispose();
+                    Console.WriteLine(tempFile5.IsDestroyed);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
 
         }

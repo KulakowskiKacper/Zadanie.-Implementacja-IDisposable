@@ -17,9 +17,30 @@ namespace TempElementsLib
 
         public TempFile()
         {
+            
             string tempPath = Path.GetTempFileName();
-            fileStream = new FileStream(tempPath, FileMode.Open, FileAccess.ReadWrite);
+            fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
             fileInfo = new FileInfo(tempPath);
+            
+        }
+
+        public TempFile(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("Path cannot be null");
+            }
+            if (path == "")
+            {
+                throw new ArgumentException("Path cannot be empty");
+            }
+            fileInfo = new FileInfo(path);
+            string directory = Path.GetDirectoryName(FilePath);
+            if (!Directory.Exists(directory))
+            {
+                throw new DirectoryNotFoundException($"The directory of the provided file path does not exist: {directory}");
+            }
+            fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
         }
 
         ~TempFile()
