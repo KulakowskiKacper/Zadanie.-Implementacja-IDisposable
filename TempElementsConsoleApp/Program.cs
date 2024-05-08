@@ -62,7 +62,7 @@ namespace TempElementsConsoleApp
             }
 
             Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using");
-            using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
+            using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test.tmp"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
             {
                 Console.WriteLine(tempFile4);
                 Console.WriteLine(tempFile4.IsDestroyed);

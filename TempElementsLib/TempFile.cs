@@ -12,34 +12,20 @@ namespace TempElementsLib
         public bool IsDestroyed { get; private set; }
         public string FilePath => fileInfo.FullName;
 
-        public readonly FileStream fileStream;
-        public readonly FileInfo fileInfo;
+        public FileStream fileStream { get; }
+        public FileInfo fileInfo { get; }
 
         public TempFile()
         {
             string tempPath = Path.GetTempFileName();
-            using (fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                fileInfo = new FileInfo(tempPath);
-            }
+            fileInfo = new FileInfo(tempPath);
+            fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
         }
 
         public TempFile(string path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException("Path cannot be null");
-            }
-            if (path == "")
-            {
-                throw new ArgumentException("Path cannot be empty");
-            }
+
             fileInfo = new FileInfo(path);
-            string directory = Path.GetDirectoryName(FilePath);
-            if (!Directory.Exists(directory))
-            {
-                throw new DirectoryNotFoundException($"The directory of the provided file path does not exist: {directory}");
-            }
             fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
         }
 
