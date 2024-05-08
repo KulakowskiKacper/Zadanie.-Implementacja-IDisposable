@@ -9,7 +9,7 @@ namespace TempElementsLib
     public class TempFile : ITempFile
     {
 
-        public bool IsDestroyed { get; private set; }
+        public bool IsDestroyed { get; set; }
         public string FilePath => fileInfo.FullName;
 
         public FileStream fileStream { get; }
@@ -47,17 +47,14 @@ namespace TempElementsLib
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
-            if (!IsDestroyed)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    fileStream?.Close();
-                    fileInfo?.Delete();
-                }
-                IsDestroyed = true;
+                fileStream.Close();
+                fileInfo.Delete();
             }
+            IsDestroyed = true;
         }
     }
 

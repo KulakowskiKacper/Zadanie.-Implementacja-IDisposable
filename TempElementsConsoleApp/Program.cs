@@ -32,15 +32,7 @@ namespace TempElementsConsoleApp
                 Console.WriteLine(tempFile2.FilePath);                                      // ścieżka dostępu do pliku
                 Console.WriteLine(tempFile2.IsDestroyed);                                   // false
             }
-            Console.WriteLine("Próba zapisu do pliku po bloku using:");
-            try
-            {
-                tempFile.AddText("Hello World!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
             Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu bloku try-catch-finally");     
             TempFile tempFile3 = null;
 
@@ -60,6 +52,15 @@ namespace TempElementsConsoleApp
                 tempFile3?.Dispose();
                 Console.WriteLine(tempFile3.IsDestroyed);
             }
+            Console.WriteLine("Próba zapisu do pliku po bloku try-catch-finally:");
+            try
+            {
+                tempFile3.AddText("Hello, World!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using");
             using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test.tmp"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
@@ -67,8 +68,6 @@ namespace TempElementsConsoleApp
                 Console.WriteLine(tempFile4);
                 Console.WriteLine(tempFile4.IsDestroyed);
                 Console.WriteLine(tempFile4.FilePath);
-                tempFile4.Dispose();
-                Console.WriteLine(tempFile4.IsDestroyed);
 
             }
             Console.WriteLine("------------------------------------------------------------\nPróba utworzenia pliku przy użyciu niepoprawnej ścieżki używając bloku using");
@@ -79,14 +78,18 @@ namespace TempElementsConsoleApp
                     Console.WriteLine(tempFile5);
                     Console.WriteLine(tempFile5.IsDestroyed);
                     Console.WriteLine(tempFile5.FilePath);
-                    tempFile5.Dispose();
-                    Console.WriteLine(tempFile5.IsDestroyed);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
+            Console.WriteLine("Próba zapisu do pliku po bloku using:");
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 2:");
+            Console.ResetColor();
 
         }
     }
