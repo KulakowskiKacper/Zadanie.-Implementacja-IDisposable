@@ -65,7 +65,6 @@ namespace TempElementsConsoleApp
             Console.WriteLine("------------------------------------------------------------\nTworzenie pliku przy użyciu konstruktora z argumentem path przy użyciu bloku using");
             using (TempFile tempFile4 = new TempFile($"D:{Path.DirectorySeparatorChar}PlikiTestowe{Path.DirectorySeparatorChar}test.tmp"))    // tworzenie pliku we wskazanym miejscu i o wskazanej nazwie
             {
-                Console.WriteLine(tempFile4);
                 Console.WriteLine(tempFile4.IsDestroyed);
                 Console.WriteLine(tempFile4.FilePath);
 
@@ -90,9 +89,8 @@ namespace TempElementsConsoleApp
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 2:");
             Console.ResetColor();
-            Console.WriteLine("Tworzenie pliku tekstowego przy użyciu \"standardowych\" komend");
-            TempTxtFile tempTxtFile = new TempTxtFile();                                     // tworzenie pliku w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
-            Console.WriteLine(tempTxtFile.FilePath);                                         // ścieżka dostępu do pliku
+            TempTxtFile tempTxtFile = new TempTxtFile(@"D:\PlikiTestowe\test");                                     // tworzenie pliku tekstowego w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
+            tempTxtFile.Close();            
 
         }
     }

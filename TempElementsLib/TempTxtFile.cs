@@ -8,8 +8,9 @@ namespace TempElementsLib
     public class TempTxtFile : TempFile
     {
         public string FilePath => fileInfo.FullName;
-        public TextReader txtReader { get; }
-        public TextWriter txtWriter { get; }
+        public FileStream fileStream { get; }
+        public FileInfo fileInfo { get; }
+        public bool IsDestroyed { get; set; }
 
         ~TempTxtFile()
         {
@@ -22,7 +23,7 @@ namespace TempElementsLib
             GC.SuppressFinalize(this);
         }
 
-        public override void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -32,39 +33,23 @@ namespace TempElementsLib
             IsDestroyed = true;
         }
 
-        public void ReadAllText()
+        public TempTxtFile()
         {
-            txtReader.ReadToEnd();
-            txtReader.Dispose();
-
+            fileStream = new FileStream(Path.GetTempFileName() + ".txt", FileMode.Create, FileAccess.ReadWrite);
+            fileInfo = new FileInfo(fileStream.Name);
         }
 
-        public void ReadLine()
+        public TempTxtFile(string path)
         {
-            txtReader.ReadLine();
-            txtReader.Dispose();
+            fileStream = new FileStream(path + ".txt", FileMode.Create, FileAccess.ReadWrite);
+            fileInfo = new FileInfo(fileStream.Name);
         }
 
-        public TempTxtFile() : base()
-        {
-        }
 
-        public TempTxtFile(string path) : base(path)
+        public void Close()
         {
+            fileStream.Close();
         }
-
-        public void Write(string text)
-        {
-            txtWriter.Write(text);
-            txtWriter.Flush();
-        }
-
-        public void WriteLine(string text)
-        {
-            txtWriter.WriteLine(text);
-            txtWriter.Flush();
-        }
-
 
     }
 }

@@ -19,14 +19,14 @@ namespace TempElementsLib
         {
             string tempPath = Path.GetTempFileName();
             fileInfo = new FileInfo(tempPath);
-            fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
+            fileStream = new FileStream(tempPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
 
         public TempFile(string path)
         {
 
             fileInfo = new FileInfo(path);
-            fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+            fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
 
         ~TempFile()
@@ -59,4 +59,3 @@ namespace TempElementsLib
     }
 
 }
-
