@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace TempElementsLib
@@ -33,6 +34,18 @@ namespace TempElementsLib
             IsDestroyed = true;
         }
 
+        public string ReadAllText()
+        {
+            string text = File.ReadAllText(fileInfo.FullName);
+            return text;
+        }
+
+        public string ReadOneLine()
+        {
+            string firstLine = File.ReadLines(fileInfo.FullName).FirstOrDefault();
+            return firstLine;
+        }
+
         public TempTxtFile()
         {
             fileStream = new FileStream(Path.GetTempFileName() + ".txt", FileMode.Create, FileAccess.ReadWrite);
@@ -49,6 +62,20 @@ namespace TempElementsLib
         public void Close()
         {
             fileStream.Close();
+        }
+
+        public void Write(string value)
+        {
+            byte[] info = new UTF8Encoding(true).GetBytes(value);
+            fileStream.Write(info, 0, info.Length);
+            fileStream.Flush();
+        }
+
+        public void WriteLine(string value)
+        {
+            byte[] info = new UTF8Encoding(true).GetBytes(value + Environment.NewLine);
+            fileStream.Write(info, 0, info.Length);
+            fileStream.Flush();
         }
 
     }

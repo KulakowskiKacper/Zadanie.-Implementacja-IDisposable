@@ -90,7 +90,18 @@ namespace TempElementsConsoleApp
             Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 2:");
             Console.ResetColor();
             TempTxtFile tempTxtFile = new TempTxtFile(@"D:\PlikiTestowe\test");                                     // tworzenie pliku tekstowego w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
-            tempTxtFile.Close();            
+            Console.WriteLine($"Ścieżka dostępu do pliku:  {tempTxtFile.FilePath}");
+            Console.WriteLine($"Czy plik jest usunięty: {tempTxtFile.IsDestroyed}");
+            Console.WriteLine("Wpisanie tekstu do pliku za pomocą metody WriteLine:");
+            tempTxtFile.WriteLine("Linijka pierwsza");                                           // próba zapisu do pliku
+            tempTxtFile.Write("Linijka druga");
+            tempTxtFile.Close();
+            Console.WriteLine("Odczytanie tekstu z pliku za pomocą metody ReadLine:");
+            Console.WriteLine(tempTxtFile.ReadOneLine());
+            Console.WriteLine("Odczytanie tekstu z pliku za pomocą metody ReadAllText:");
+            Console.WriteLine(tempTxtFile.ReadAllText());
+            tempTxtFile.Dispose();
+         
 
         }
     }
