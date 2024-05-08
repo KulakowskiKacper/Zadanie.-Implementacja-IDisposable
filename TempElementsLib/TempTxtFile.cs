@@ -7,6 +7,9 @@ namespace TempElementsLib
 {
     public class TempTxtFile : TempFile
     {
+        public string FilePath => fileInfo.FullName;
+        public TextReader txtReader { get; }
+        public TextWriter txtWriter { get; }
 
         ~TempTxtFile()
         {
@@ -29,6 +32,16 @@ namespace TempElementsLib
             IsDestroyed = true;
         }
 
+        public string ReadAllText()
+        {
+            return txtReader.ReadToEnd();
+        }
+
+        public string ReadLine()
+        {
+            return txtReader.ReadLine();
+        }
+
         public TempTxtFile() : base()
         {
         }
@@ -39,22 +52,14 @@ namespace TempElementsLib
 
         public void Write(string text)
         {
-            using (StreamWriter writer = new StreamWriter(fileStream))
-            {
-                writer.Write(text);
-                writer.Flush();
-                fileStream.Position = 0;
-            }
+            txtWriter.Write(text);
         }
 
-        public string ReadAllText()
+        public void WriteLine(string text)
         {
-            using (StreamReader reader = new StreamReader(fileStream))
-            {
-                string text = reader.ReadToEnd();
-                fileStream.Position = 0;
-                return text;
-            }
+            txtWriter.WriteLine(text);
         }
+
+
     }
 }
