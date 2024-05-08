@@ -90,6 +90,9 @@ namespace TempElementsConsoleApp
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 2:");
             Console.ResetColor();
+            Console.WriteLine("Tworzenie pliku tekstowego przy użyciu \"standardowych\" komend");
+            TempTxtFile tempTxtFile = new TempTxtFile();                                     // tworzenie pliku w domyslnej dla systemu/użytkownika lokalizacji i o losowej nazwie
+            Console.WriteLine(tempTxtFile.FilePath);                                         // ścieżka dostępu do pliku
 
         }
     }

@@ -32,14 +32,17 @@ namespace TempElementsLib
             IsDestroyed = true;
         }
 
-        public string ReadAllText()
+        public void ReadAllText()
         {
-            return txtReader.ReadToEnd();
+            txtReader.ReadToEnd();
+            txtReader.Dispose();
+
         }
 
-        public string ReadLine()
+        public void ReadLine()
         {
-            return txtReader.ReadLine();
+            txtReader.ReadLine();
+            txtReader.Dispose();
         }
 
         public TempTxtFile() : base()
@@ -53,11 +56,13 @@ namespace TempElementsLib
         public void Write(string text)
         {
             txtWriter.Write(text);
+            txtWriter.Flush();
         }
 
         public void WriteLine(string text)
         {
             txtWriter.WriteLine(text);
+            txtWriter.Flush();
         }
 
 
