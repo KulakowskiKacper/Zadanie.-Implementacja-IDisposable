@@ -9,8 +9,8 @@ namespace TempElementsLib
     public class TempTxtFile : TempFile
     {
         public string FilePath => fileInfo.FullName;
-        public FileStream fileStream { get; }
-        public FileInfo fileInfo { get; }
+        public FileStream fileStream { get; set; }
+        public FileInfo fileInfo { get; set; }
         public bool IsDestroyed { get; set; }
 
         ~TempTxtFile()
@@ -30,6 +30,12 @@ namespace TempElementsLib
             {
                 fileStream?.Close();
                 fileInfo?.Delete();
+                File.Delete(fileInfo.FullName);
+            }
+            if (fileInfo != null)
+            {
+                fileInfo.Delete();
+                fileInfo = null;
             }
             IsDestroyed = true;
         }

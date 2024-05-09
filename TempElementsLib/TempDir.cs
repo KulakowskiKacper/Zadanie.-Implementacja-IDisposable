@@ -9,52 +9,30 @@ namespace TempElementsLib
 {
     public class TempDir : ITempDir
     {
+        private bool isEmpty;
+
+        public string DirPath => dirInfo.FullName;
+
+        public bool IsEmpty 
+            {
+                get
+            {
+                    if (dirInfo.GetFileSystemInfos().Length == 0)
+                {
+                        isEmpty = true;
+                    }
+                    else
+                {
+                        isEmpty = false;
+                    }
+                    return isEmpty;
+                }
+            set => isEmpty = value;
+            }
+
         public bool IsDestroyed { get; set; }
 
-        public bool IsEmpty { get; set; }
-
-        public DirectoryInfo? DirectoryInfo { get; set; }
-        public string DirPath => DirectoryInfo?.FullName;
-
-        public TempDir()
-        {
-            DirectoryInfo = new DirectoryInfo(Path.GetTempPath());
-        }
-
-        public TempDir(string path)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException("Path cannot be null");
-            }
-            if (path == "")
-            {
-                throw new ArgumentException("Path cannot be empty");
-            }
-            Directory.CreateDirectory(path);
-        }
-
-        public void Empty()
-        {
-            try
-            {
-                DirectoryInfo?.Delete(true);
-                DirectoryInfo?.Create();
-            }
-            catch (IOException)
-            {
-                
-            }
-            catch (UnauthorizedAccessException)
-            {
-                
-            }
-            finally
-            {
-                DirectoryInfo = null;
-                IsEmpty = true;
-            }
-        }
+        public DirectoryInfo dirInfo { get; }
 
         ~TempDir()
         {
@@ -64,29 +42,40 @@ namespace TempElementsLib
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                try
-                {
-                    DirectoryInfo?.Delete(true);
-                }
-                catch (IOException)
-                {
-                    
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    
-                }
-                finally
-                {
-                    DirectoryInfo = null;
-                }
+                dirInfo.Delete(true);
             }
+            IsDestroyed = true;
+        }
+
+        public void Empty()
+        {
+            foreach (FileInfo file in dirInfo.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in dirInfo.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+        }
+
+        public TempDir()
+        {
+            string tempPath = Path.GetTempPath();
+            dirInfo = new DirectoryInfo(tempPath);
+        }
+
+        public TempDir(string path)
+        {
+            Directory.CreateDirectory(path);
+            dirInfo = new DirectoryInfo(path);
         }
     }
 }
