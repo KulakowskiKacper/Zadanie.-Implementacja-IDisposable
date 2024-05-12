@@ -10,5 +10,6 @@ namespace TempElementsLib
     public interface ITempElement : IDisposable
     {
         bool IsDestroyed { get; } //true, jeśli element skutecznie usunięty
+
     }
 }

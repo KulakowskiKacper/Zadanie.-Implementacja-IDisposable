@@ -109,40 +109,72 @@ namespace TempElementsConsoleApp
             //    Console.WriteLine($"Czy plik jest usunięty: {tempTxtFile2.IsDestroyed}");
             //}
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 3:");
-            Console.ResetColor();
-            TempDir tempDir = new TempDir(@"D:\PlikiTestowe\folder");
-            Console.WriteLine($"Ścieżka dostępu do katalogu:  {tempDir.DirPath}");
-            Console.WriteLine($"Czy katalog jest pusty: {tempDir.IsEmpty}");
-            Console.WriteLine("Tworzenie pliku w katalogu:");
-            TempFile tempFileDir = new TempFile(@"D:\PlikiTestowe\folder\test.tmp");
-            Console.Write("Sprawdzanie czy folder jest pusty:");
-            Console.WriteLine(tempDir.IsEmpty);
-            Console.WriteLine("Usuwanie pliku z katalogu za pomocą metody Empty:");
-            tempFileDir.fileStream.Close();
-            tempDir.Empty();
-            Console.Write("Sprawdzanie czy folder jest pusty:");
-            Console.WriteLine(tempDir.IsEmpty);
-            Console.WriteLine("Usuwanie katalogu za pomocą metody Dispose:");
-            tempDir.Dispose();
-            Console.WriteLine($"Czy katalog jest usunięty: {tempDir.IsDestroyed}");
-            Console.WriteLine("Próba dostępu do katalogu po jego usunięciu:");
-            try
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("Testowanie przy użyciu konsoli wymienionych założeń z zadania 3:");
+            //Console.ResetColor();
+            //TempDir tempDir = new TempDir(@"D:\PlikiTestowe\folder");
+            //Console.WriteLine($"Ścieżka dostępu do katalogu:  {tempDir.DirPath}");
+            //Console.WriteLine($"Czy katalog jest pusty: {tempDir.IsEmpty}");
+            //Console.WriteLine("Tworzenie pliku w katalogu:");
+            //TempFile tempFileDir = new TempFile(@"D:\PlikiTestowe\folder\test.tmp");
+            //Console.Write("Sprawdzanie czy folder jest pusty:");
+            //Console.WriteLine(tempDir.IsEmpty);
+            //Console.WriteLine("Usuwanie pliku z katalogu za pomocą metody Empty:");
+            //tempFileDir.fileStream.Close();
+            //tempDir.Empty();
+            //Console.Write("Sprawdzanie czy folder jest pusty:");
+            //Console.WriteLine(tempDir.IsEmpty);
+            //Console.WriteLine("Usuwanie katalogu za pomocą metody Dispose:");
+            //tempDir.Dispose();
+            //Console.WriteLine($"Czy katalog jest usunięty: {tempDir.IsDestroyed}");
+            //Console.WriteLine("Próba dostępu do katalogu po jego usunięciu:");
+            //try
+            //{
+            //tempFileDir = new TempFile(@"D:\PlikiTestowe\folder\test.tmp");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
+            //Console.WriteLine("------------------------------------------------------------\nTworzenie katalogu za pomocą bloku using:");
+            //using (TempDir tempDir2 = new TempDir(@"D:\PlikiTestowe\folder"))
+            //{
+            //    Console.WriteLine($"Ścieżka dostępu do katalogu:  {tempDir2.DirPath}");
+            //    Console.WriteLine($"Czy katalog jest pusty: {tempDir2.IsEmpty}");
+            //}
+
+            TempFile tempFile = new TempFile($@"D:\TempFile");
+            TempDir tempDir = new TempDir($@"D:\TempDir");
+            using (TempElementsList tempElementsList = new TempElementsList())
             {
-            tempFileDir = new TempFile(@"D:\PlikiTestowe\folder\test.tmp");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+
+                // Add elements with specific paths
+
+                tempElementsList.AddExistingElement(tempFile);
+                tempElementsList.AddExistingElement(tempDir);
+
+                Console.WriteLine($"Number of elements after adding: {tempElementsList.Elements.Count}");
+
+
+                // Move elements
+
+                tempFile.Close();
+                tempElementsList.MoveElementTo(tempFile, @"D:\PlikiTestowe2\");
+                tempFile.fileInfo.Refresh();
+                Console.WriteLine($"New File path: {tempFile.FilePath}");
+
+
+                // Check if the list is empty
+                Console.WriteLine($"Is the list empty: {tempElementsList.IsEmpty}");
+                tempElementsList.DeleteElement(tempFile);
+                Console.WriteLine($"Is the list empty: {tempElementsList.IsEmpty}");
+                Console.WriteLine($"Number of elements after deleting: {tempElementsList.Elements.Count}");
+
             }
 
-            Console.WriteLine("------------------------------------------------------------\nTworzenie katalogu za pomocą bloku using:");
-            using (TempDir tempDir2 = new TempDir(@"D:\PlikiTestowe\folder"))
-            {
-                Console.WriteLine($"Ścieżka dostępu do katalogu:  {tempDir2.DirPath}");
-                Console.WriteLine($"Czy katalog jest pusty: {tempDir2.IsEmpty}");
-            }
+            tempDir.Dispose();
+            tempFile.Dispose();
 
         }
     }

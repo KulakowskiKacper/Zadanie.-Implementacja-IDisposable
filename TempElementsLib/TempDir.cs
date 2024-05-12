@@ -9,11 +9,20 @@ namespace TempElementsLib
 {
     public class TempDir : ITempDir
     {
-        private bool isEmpty;
+        private bool isEmpty;  //true, jeśli katalog jest pusty
 
-        public string DirPath => dirInfo.FullName;
+        public string DirPath  //ścieżka do katalogu
+        {
+            get
+            {
+                return dirInfo.FullName;
+            }
+            set
+            {
+            }
+        }
 
-        public bool IsEmpty 
+        public bool IsEmpty   //true, jeśli katalog jest pusty
             {
                 get
             {
@@ -30,16 +39,16 @@ namespace TempElementsLib
             set => isEmpty = value;
             }
 
-        public bool IsDestroyed { get; set; }
+        public bool IsDestroyed { get; set; }  //true, jeśli element skutecznie usunięty
 
-        public DirectoryInfo dirInfo { get; }
+        public DirectoryInfo dirInfo { get; }  //informacje o katalogu
 
-        ~TempDir()
+        ~TempDir()  //destruktor
         {
             Dispose(false);
         }
 
-        public void Dispose()
+        public void Dispose()  //usuwa katalog
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -47,14 +56,19 @@ namespace TempElementsLib
 
         public virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!IsDestroyed)
             {
-                dirInfo.Delete(true);
+                if (disposing)
+                {
+                    Empty();
+                    Directory.Delete(dirInfo.FullName, true);
+                }
+                IsDestroyed = true;
             }
-            IsDestroyed = true;
         }
 
-        public void Empty()
+
+        public void Empty()  //usuwa wszystkie pliki i katalogi z katalogu
         {
             foreach (FileInfo file in dirInfo.GetFiles())
             {
@@ -66,16 +80,22 @@ namespace TempElementsLib
             }
         }
 
-        public TempDir()
+        public void Close()  //zamyka katalog
+        {
+            dirInfo.Delete(true);
+        }
+
+        public TempDir()  //konstruktor tworzący katalog tymczasowy w domyślnym katalogu
         {
             string tempPath = Path.GetTempPath();
             dirInfo = new DirectoryInfo(tempPath);
         }
 
-        public TempDir(string path)
+        public TempDir(string? pathToDir)  //konstruktor tworzący katalog tymczasowy w podanej lokalizacji
         {
-            Directory.CreateDirectory(path);
-            dirInfo = new DirectoryInfo(path);
+            Directory.CreateDirectory(pathToDir);
+            dirInfo = new DirectoryInfo(pathToDir);
+
         }
     }
 }
